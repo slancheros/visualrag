@@ -1,0 +1,64 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# ---- Virtual Environments ----
+.venv/
+venv/
+env/
+
+# ---- Jupyter Notebook ----
+.ipynb_checkpoints
+
+# ---- Environment Variables ----
+.env
+.env.*
+
+# ---- OS-specific ----
+.DS_Store
+Thumbs.db
+
+# ---- Logs ----
+*.log
+logs/
+
+# ---- Cache ----
+.cache/
+.mypy_cache/
+.pytest_cache/
+__pycache__/
+
+# ---- Model files ----
+*.bin
+*.safetensors
+*.h5
+*.ckpt
+*.pth
+*.pt
+
+# Ignore model folder inside each service
+services/*/model/
+services/*/models/
+services/embedding/.models/
+
+# ---- FiftyOne datasets ----
+.fiftyone/
+
+# ---- IDE configs ----
+.vscode/
+.idea/
+
+# ---- Docker ----
+*.pid
+*.seed
+*.pid.lock
+
+# ---- Render / Deploy ----
+render.yaml
