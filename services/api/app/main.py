@@ -1,33 +1,24 @@
-import fastapi
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from app.config import settings
+from app.routers.indexer import router as indexer_router
+from app.routers.search import router as search_router
+from app.routers.agent import router as agent_router
 
+app = FastAPI(title="Visual RAG API")
 
+# servir imágenes indexadas localmente
+app.mount("/media", StaticFiles(directory=settings.MEDIA_DIR), name="media")
 
-
-app = FastAPI(title="RAG Visual API", version="1.0.0")
-try:
-    from app.config import settings
-    APP_NAME = settings.APP_NAME
-except Exception:
-    APP_NAME = "ragvisual-api"
-
-
-@app.get("/")
-async def root():
-    return {"message": "Hello, World!"}
+# rutas
+app.include_router(indexer_router, prefix="/rag", tags=["indexing"])
+app.include_router(search_router, prefix="/rag", tags=["search"])
+app.include_router(agent_router, tags=["agent"])
 
 @app.get("/health")
-async def health_check():
+def health():
     return {"status": "ok"}
-
-@app.get("/version")
-async def version():
-    return {"version": "1.0.0"}
-
-
-
-
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000)
