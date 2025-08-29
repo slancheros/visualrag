@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  weaviate:
+    image: semitechnologies/weaviate:latest
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      QUERY_DEFAULTS_LIMIT: "25"
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      PERSISTENCE_DATA_PATH: "/var/lib/weaviate"
+      DEFAULT_VECTORIZER_MODULE: "none"   # vectorizamos con nuestro CLIP
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+
+  api:
+    build:
+      context: ./services/api
+    container_name: rag_api
+    restart: unless-stopped
+    env_file:
+      - ./services/api/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - weaviate
+    volumes:
+      - ./services/api/app:/app/app
+
+volumes:
+  weaviate_data:
